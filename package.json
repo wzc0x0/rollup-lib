@@ -1,0 +1,27 @@
+{
+    "name": "rollup-package",
+    "version": "1.0.0",
+    "description": "package js by rollup",
+    "main": "index.js",
+    "author": "wzc0x0@gmail.com",
+    "license": "MIT",
+    "private": false,
+    "scripts": {
+        "build": "rollup -c --watch",
+        "reload": "node bs.config.js",
+        "watch": "npm-run-all --parallel reload build"
+    },
+    "devDependencies": {
+        "babel-core": "^6.26.0",
+        "babel-plugin-external-helpers": "^6.22.0",
+        "babel-preset-env": "^1.6.1",
+        "browser-sync": "^2.23.6",
+        "npm-run-all": "^4.1.2",
+        "rollup": "^0.57.1",
+        "rollup-plugin-babel": "^3.0.3",
+        "rollup-plugin-node-resolve": "^3.3.0",
+        "rollup-plugin-replace": "^2.0.0",
+        "rollup-plugin-uglify": "^3.0.0",
+        "rollup-watch": "^4.3.1"
+    }
+}
