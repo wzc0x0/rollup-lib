@@ -1,2 +1,2 @@
-import calcTime from './calcTime.js'
+import calcTime from './stayTime'
 window.calcTime = calcTime;
