@@ -1,1 +1,91 @@
-!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n():"function"==typeof define&&define.amd?define(n):n()}(0,function(){"use strict";var e=function(e,n){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")},n=function(){function e(e,n){for(var t=0;t<n.length;t++){var o=n[t];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(e,o.key,o)}}return function(n,t,o){return t&&e(n.prototype,t),o&&e(n,o),n}}(),t=new(function(){function t(n){e(this,t),this.origin=n,this.showTime()}return n(t,[{key:"getNow",value:function(){return((new Date).getTime()-this.origin)/1e3}},{key:"calcTime",value:function(){var e=Math.round(this.getNow()),n=~~Math.round((e-30)/60);return console.log(n),n}},{key:"showTime",value:function(){var e=this;if(arguments.length>0&&void 0!==arguments[0]&&arguments[0])clearInterval(stop),localStorage.getItem("now",now);else setInterval(function(){e.calcTime()},1e3)}},{key:"stopTime",value:function(){this.calcTime(!0)}}]),t}())(new Date);window.calcTime=t});
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (factory());
+}(this, (function () { 'use strict';
+
+  var classCallCheck = function (instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  };
+
+  var createClass = function () {
+    function defineProperties(target, props) {
+      for (var i = 0; i < props.length; i++) {
+        var descriptor = props[i];
+        descriptor.enumerable = descriptor.enumerable || false;
+        descriptor.configurable = true;
+        if ("value" in descriptor) descriptor.writable = true;
+        Object.defineProperty(target, descriptor.key, descriptor);
+      }
+    }
+
+    return function (Constructor, protoProps, staticProps) {
+      if (protoProps) defineProperties(Constructor.prototype, protoProps);
+      if (staticProps) defineProperties(Constructor, staticProps);
+      return Constructor;
+    };
+  }();
+
+  var StayTime = function () {
+      function StayTime(cb) {
+          classCallCheck(this, StayTime);
+
+          typeof cb === 'function' && (this.callback = cb);
+          this.clearId = null;
+          this.stay_sec = null;
+          this.stay_min = null;
+          this.true_sec = null;
+          this.start();
+      }
+
+      createClass(StayTime, [{
+          key: 'start',
+          value: function start() {
+              this.clearId || this.interval();
+          }
+      }, {
+          key: 'stop',
+          value: function stop() {
+              this.clearId && clearInterval(this.clearId);
+              this.stay_sec += Number(StayTime.convert(sessionStorage.getItem('stay_sec'), false));
+              sessionStorage.setItem('stay_sec', StayTime.convert(this.stay_sec, true));
+              this.true_sec = this.stay_sec; //really stay_min
+              this.clearId = null;
+          }
+      }, {
+          key: 'interval',
+          value: function interval() {
+              var start = new Date().getTime(),
+                  that = this;
+              that.clearId = setInterval(function _() {
+                  var total = Math.round((new Date().getTime() - start) / 1000);
+                  // that.stay_sec = total % 60;
+                  that.stay_sec = total;
+                  that.true_sec = that.stay_sec;
+                  that.true_sec > 0 && that.true_sec % 10 === 0 && that.callback();
+                  // that.stay_min = ~~Math.round((total - 30) / 60);
+                  console.log(that.stay_sec);
+                  return _;
+              }(), 1000);
+          }
+      }], [{
+          key: 'convert',
+          value: function convert(str, status) {
+              // status true decode or false uncode
+              // must be number or null , avoid NaN
+              if (str == null) return null;
+              return status ? window.btoa && window.btoa(str) : window.atob && window.atob(str);
+          }
+      }]);
+      return StayTime;
+  }();
+
+  var calcTime = new StayTime(function () {
+      console.log('~~~~~');
+  });
+
+  window.calcTime = calcTime;
+
+})));
