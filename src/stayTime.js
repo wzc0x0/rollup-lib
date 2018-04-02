@@ -1,15 +1,11 @@
 import { local as sessionStorage } from "./storage";
+import visible from './visible'
 
-
-
-function isMinStatus() {
-    var isMin = false;
-    if (window.outerWidth != undefined) {
-        isMin = window.outerWidth <= 160 && window.outerHeight <= 27;
-    } else {
-        isMin = window.screenTop < -30000 && window.screenLeft < -30000;
-    }
-    return isMin;
+window.onload = function() {
+    visible(function() {
+        document.body.className === "hidden" && window.calcTime.start()
+        document.body.className === "visible" && window.calcTime.stop()
+    })
 }
 
 class StayTime {
@@ -46,7 +42,7 @@ class StayTime {
                 that.stay_sec = total;
                 that.true_sec = that.stay_sec;
                 that.true_sec > 0 && that.true_sec % that.timespan === 0 && that.callback();
-                console.log(that.stay_sec);
+                // console.log(that.stay_sec);
                 return _;
             })(),
             1000
@@ -91,9 +87,4 @@ class StayTime {
     }
 }
 
-export default new StayTime({
-    timespan: 15,
-    callback: function() {
-        console.log("~~~~")
-    }
-});
+export default StayTime

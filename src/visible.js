@@ -1,6 +1,6 @@
-  function visible(onchange) {
+  function visible(callback) {
 
-      if (typeof onchange !== 'function') return;
+      if (typeof callback !== 'function') return;
 
       var hidden = "hidden";
 
@@ -31,7 +31,7 @@
                   focusout: h,
                   pagehide: h
               };
-
+          callback()
           evt = evt || window.event;
           if (evt.type in evtMap)
               document.body.className = evtMap[evt.type];
@@ -42,4 +42,4 @@
           onchange({ type: document[hidden] ? "blur" : "focus" });
   }
 
-  export default visible;
+  export default visible

@@ -4,19 +4,17 @@ import babel from 'rollup-plugin-babel'
 import replace from 'rollup-plugin-replace'
 
 export default {
-    input:'src/main.js',
-    output:{
-        file:'dist/bundle.js',
-        format:'umd'
+    input: 'src/main.js',
+    output: {
+        file: 'dist/bundle.js',
+        name: 'library',
+        format: 'umd'
     },
-    plugins:[
-      resolve(),
-      uglify(),
-      replace({
-        ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-      }),
-      babel({
-        exclude: 'node_modules/**' // only transpile our source code
-      })
+    plugins: [
+        resolve(),
+        (process.env.NODE_ENV === 'production' && uglify()),
+        babel({
+            exclude: 'node_modules/**' // only transpile our source code
+        })
     ]
 }
